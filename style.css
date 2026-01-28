@@ -1,0 +1,27 @@
+body{
+    margin: 0;
+    padding: 0;
+
+    margin: 0;
+    height: 100vh;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.calc-container{
+    background-color: #232020;
+    width: 500px;
+    height: 700px;
+    border-radius: 20px;
+}
+
+.calc-display {
+    margin: 0 auto;
+    margin-top: 25px;
+    width: 450px;
+    height: 100px;
+    background: palegoldenrod;
+    color: #fff;
+}
