@@ -22,19 +22,31 @@ const buttons = [
         type: "action",
         value: "clear"
     },
-
-    {id: "n1", label: "1", type: "number", value: 1 },
-    {id: "n2", label: "1", type: "number", value: 1 },
-    {id: "n3", label: "1", type: "number", value: 1 },
     
-    {id: "n4", label: "1", type: "number", value: 1 },
-    {id: "n5", label: "1", type: "number", value: 1 },
-    {id: "n6", label: "1", type: "number", value: 1 },
-
-    {id: "n7", label: "1", type: "number", value: 1 },
-    {id: "n8", label: "1", type: "number", value: 1 },
-    {id: "n9", label: "1", type: "number", value: 1 },
-
+    {
+        id: "div",
+        label: "÷",
+        shiftLabel: "√",
+        type: "operation",
+        value: "div",
+        shiftValue: "sqrt"
+    },
+    
+    {id: "n7", label: "7", type: "number", value: 7 },
+    {id: "n8", label: "8", type: "number", value: 8 },
+    {id: "n9", label: "9", type: "number", value: 9 },
+    {
+        id: "sub",
+        label: "-",
+        shiftLabel: "x³",
+        type: "operation",
+        value: "sub",
+        shiftValue: "cube"
+    },    
+    
+    {id: "n4", label: "4", type: "number", value: 4 },
+    {id: "n5", label: "5", type: "number", value: 5 },
+    {id: "n6", label: "6", type: "number", value: 6 },
     {
         id: "add",
         label: "+",
@@ -43,16 +55,11 @@ const buttons = [
         value: "add",
         shiftValue: "factorial"
     },
-
-    {
-        id: "sub",
-        label: "-",
-        shiftLabel: "x³",
-        type: "operation",
-        value: "sub",
-        shiftValue: "cube"
-    },
-
+    
+    {id: "n1", label: "1", type: "number", value: 1 },
+    {id: "n2", label: "2", type: "number", value: 2 },
+    {id: "n3", label: "3", type: "number", value: 3 },
+    
     {
         id: "mul",
         label: "x",
@@ -62,14 +69,7 @@ const buttons = [
         shiftValue: "log"
     },
 
-    {
-        id: "div",
-        label: "÷",
-        shiftLabel: "√",
-        type: "operation",
-        value: "div",
-        shiftValue: "sqrt"
-    },
+    {id: "n0", label: "0", type: "number", value: 0},
 
     {
         id: "sq",
@@ -78,6 +78,54 @@ const buttons = [
         type: "operation",
         value: "sq",
         shiftValue: "cuberoot"
-    }
+    },
 
+    {
+        id: "equal",
+        label: "=",
+        shiftLabel: "=",
+        type: "operation",
+        value: "equal",
+    }
 ]
+
+const buttonsContainer = document.getElementById("buttons");
+
+buttons.forEach(btn => {
+    const button = document.createElement("button");
+
+    button.textContent = btn.label;
+
+    button.addEventListener("click", () =>{
+        handleButtonClick(btn);
+    });
+
+    button.classList.add("button", btn.type);
+
+    buttonsContainer.appendChild(button)
+
+});
+
+
+const display = document.getElementById("display");
+let currentValue = "0";
+
+function handleButtonClick(btn){
+
+    if( btn.type === "number")
+        addNumber(btn.value);
+
+    else if(btn.type === "operation")
+        addOperation(btn);
+
+}
+
+function addNumber(value){
+    currentValue = value;
+    display.textContent = currentValue;
+}
+
+function addOperation(operation){
+    display.textContent = operation.label;
+}
+

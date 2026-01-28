@@ -12,16 +12,42 @@ body{
 
 .calc-container{
     background-color: #232020;
-    width: 500px;
-    height: 700px;
+    width: 450px;
+    height: 580px;
     border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 30px;
 }
 
-.calc-display {
+.display {
     margin: 0 auto;
     margin-top: 25px;
-    width: 450px;
+    padding: 0 15px;
+    width: 90%;
     height: 100px;
     background: palegoldenrod;
-    color: #fff;
+    border-radius: 10px;
+    
+    display: flex;
+    align-items: center;
+
+    color: black;
+    font-size: 40px;
+    font-weight: 400;
+
+}
+
+.buttons{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.button{
+    height: 70px;
+    width: 90px;
+    background-color: palegoldenrod;
+    border-radius: 10px;
 }
