@@ -153,7 +153,7 @@ function addOperation(btn){
 
 function isEqual(first, op, second){
 
-    if(first === null || op == null)return;
+    if(first === null || op === null)return;
     if(currentValue === "")return;
 
     let result;
@@ -161,6 +161,22 @@ function isEqual(first, op, second){
     second = Number(second);
 
     if(op === "+")result = first + second;
+    else if(op === "-")result = first - second;
+    else if(op === "x")result = first * second;
+    else if(op === "÷"){
+
+        if(second === 0){
+            displayValue = "ERROR: Nemoguće dijeliti sa nulom!";
+            number = null;
+            operation = null;
+            currentValue = "";
+            return;
+        }
+        else
+            result = first / second;
+    }
+    else if(op === "x²")result =
+
 
     number = null;
     operation = null;
