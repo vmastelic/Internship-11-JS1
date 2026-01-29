@@ -142,7 +142,20 @@ function addNumber(value){
 function addOperation(btn){
 
     if(operation !== null)return;
-    if(currentValue === "")return;
+    else if(currentValue === "")return;
+    else if (btn.value === "sq") {
+        if (currentValue === "") return;
+
+        const a = Number(currentValue);
+        const result = a * a;
+
+        displayValue = String(result);
+        currentValue = String(result);
+
+        number = null;
+        operation = null;
+        return;
+    }
 
     number = currentValue;
     displayValue += " " + btn.label + " ";
