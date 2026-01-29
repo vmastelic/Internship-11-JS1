@@ -35,6 +35,7 @@ const buttons = [
     {id: "n7", label: "7", type: "number", value: 7 },
     {id: "n8", label: "8", type: "number", value: 8 },
     {id: "n9", label: "9", type: "number", value: 9 },
+
     {
         id: "sub",
         label: "-",
@@ -84,7 +85,7 @@ const buttons = [
         id: "equal",
         label: "=",
         shiftLabel: "=",
-        type: "operation",
+        type: "equal",
         value: "equal",
     }
 ]
@@ -108,24 +109,62 @@ buttons.forEach(btn => {
 
 
 const display = document.getElementById("display");
-let currentValue = "0";
+
+let number = null;
+let operation = null;
+
+let currentValue = "";
+let displayValue = "";
 
 function handleButtonClick(btn){
 
-    if( btn.type === "number")
-        addNumber(btn.value);
+    if(btn.type === "number")addNumber(btn.value);
+    else if(btn.type === "operation")addOperation(btn);
+    else if(btn.type === "equal")isEqual(number, operation, currentValue);
+    
+    updateDisplay();
+}
 
-    else if(btn.type === "operation")
-        addOperation(btn);
-
+function updateDisplay(){
+    display.textContent = displayValue;
 }
 
 function addNumber(value){
-    currentValue = value;
-    display.textContent = currentValue;
+    currentValue += String(value);
+
+    if (operation === null)
+        displayValue = currentValue;
+
+    else
+    displayValue = `${number} ${operation} ${currentValue}`;
 }
 
-function addOperation(operation){
-    display.textContent = operation.label;
+function addOperation(btn){
+
+    if(operation !== null)return;
+    if(currentValue === "")return;
+
+    number = currentValue;
+    displayValue += " " + btn.label + " ";
+    operation = btn.label;
+    currentValue = "";
+    console.log(operation);
+}
+
+function isEqual(first, op, second){
+
+    if(first === null || op == null)return;
+    if(currentValue === "")return;
+
+    let result;
+    first = Number(first);
+    second = Number(second);
+
+    if(op === "+")result = first + second;
+
+    number = null;
+    operation = null;
+    currentValue = String(result);
+    displayValue = currentValue;
 }
 
