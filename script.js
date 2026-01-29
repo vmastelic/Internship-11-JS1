@@ -92,10 +92,13 @@ const buttons = [
 
 const buttonsContainer = document.getElementById("buttons");
 
+let shiftMode = false;
+
 buttons.forEach(btn => {
     const button = document.createElement("button");
 
     button.textContent = btn.label;
+    button.dataset.id = btn.id;
 
     button.addEventListener("click", () =>{
         handleButtonClick(btn);
@@ -106,7 +109,6 @@ buttons.forEach(btn => {
     buttonsContainer.appendChild(button)
 
 });
-
 
 const display = document.getElementById("display");
 
@@ -121,6 +123,7 @@ function handleButtonClick(btn){
     if(btn.type === "number")addNumber(btn.value);
     else if(btn.type === "operation")addOperation(btn);
     else if(btn.type === "equal")isEqual(number, operation, currentValue);
+    else if(btn.type === "action")handleAction(btn);
     
     updateDisplay();
 }
@@ -141,13 +144,44 @@ function addNumber(value){
 
 function addOperation(btn){
 
+    const opKey = (shiftMode && btn.shiftValue) ? btn.shiftValue : btn.value;
+
     if(operation !== null)return;
     else if(currentValue === "")return;
-    else if (btn.value === "sq") {
-        if (currentValue === "") return;
 
-        const a = Number(currentValue);
-        const result = a * a;
+    else if (opKey === "sq") {
+        const num = Number(currentValue);
+        const result = num * num;
+
+        displayValue = String(result);
+        currentValue = String(result);
+
+        number = null;
+        operation = null;
+        return;
+    }
+    
+    else if(opKey === "factorial"){
+        const num = Number(currentValue);
+        
+        if(num < 0){
+            displayValue = "ERROR: Samo za brojeve >= 0!";
+            number = null;
+            operation = null;
+            currentValue = "";
+            return;
+        }
+        
+        const result = factorial(num);
+        displayValue = String(result);
+        currentValue = String(result);
+        return;        
+    }
+    
+    else if (opKey === "cube") {
+
+        const num = Number(currentValue);
+        const result = num * num * num;
 
         displayValue = String(result);
         currentValue = String(result);
@@ -157,11 +191,44 @@ function addOperation(btn){
         return;
     }
 
+    else if(opKey === "sqrt"){
+        const num = Number(currentValue);
+        if(num < 0){
+            displayValue = "ERROR: Samo za brojeve >= 0!";
+            number = null;
+            operation = null;
+            currentValue = "";
+            return;
+        }
+        const result = Math.sqrt(num);
+
+        displayValue = String(result);
+        currentValue = String(result);
+        return;
+    }
+
+    else if(opKey === "cuberoot"){
+        const num = Number(currentValue);
+        const result = Math.cbrt(num);
+
+        displayValue = String(result);
+        currentValue = String(result);
+        return;
+    }
+
+    else if(opKey === "log"){
+        const num = Number(currentValue);
+        const result = Math.log10(num);
+
+        displayValue = String(result);
+        currentValue = String(result);
+        return;
+    }
+
     number = currentValue;
     displayValue += " " + btn.label + " ";
     operation = btn.label;
     currentValue = "";
-    console.log(operation);
 }
 
 function isEqual(first, op, second){
@@ -188,8 +255,6 @@ function isEqual(first, op, second){
         else
             result = first / second;
     }
-    else if(op === "x²")result =
-
 
     number = null;
     operation = null;
@@ -197,3 +262,43 @@ function isEqual(first, op, second){
     displayValue = currentValue;
 }
 
+function handleAction(btn){
+
+    if(btn.value === "clear"){
+        number = null;
+        currentValue = "";
+        operation = null;
+        displayValue = "";
+    }
+
+    else if(btn.value === "shift"){
+        shiftMode = !shiftMode;
+        updateButtonLabels();
+    }
+
+}
+
+function updateButtonLabels() {
+    const domButtons = document.querySelectorAll("#buttons button");
+
+    domButtons.forEach(domBtn => {
+        
+        const id = domBtn.dataset.id;
+        const btnData = buttons.find(b => b.id === id);
+
+        if (!btnData) return;
+
+        if (shiftMode && btnData.shiftLabel) {
+            domBtn.textContent = btnData.shiftLabel;
+        } else {
+            domBtn.textContent = btnData.label;
+        }
+    });    
+
+}
+
+function factorial(n) {
+    if (n < 0) return null;      
+    if (n === 0) return 1;       
+    return n * factorial(n - 1); 
+}
