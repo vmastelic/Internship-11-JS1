@@ -5,6 +5,8 @@ body{
     margin: 0;
     height: 100vh;
 
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 500;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -50,8 +52,9 @@ body{
     width: 90px;
     background-color: palegoldenrod;
     border-radius: 10px;
-
-    font-size: 20px;
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    font-weight: 100;
+    font-size: 22px;
 }
 
 .history{

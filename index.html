@@ -1,30 +1,45 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calculator-JS1</title>
-
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-    <div class="calc-container">
-
-        <div class="display" id="display"></div>
-
-        <div class="buttons" id="buttons"></div>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Calculator-JS1</title>
         
-        <button id = "history-button" class="history-button">Povijest</button>
-        <div id = "history" class="history">
-            <div class="history-content">
-                <span id="close-history" class="close">&times;</span>
-                <h2>Povijest</h2>
+        <link rel="stylesheet" href="style.css">
+    </head>
+    <body>
+        <div class="calc-container">
+            
+            <div class="display" id="display"></div>
+            
+            <div class="buttons" id="buttons"></div>
+            
+            <button id = "history-button" class="history-button">Povijest</button>
+            <div id = "history" class="history">
+                <div class="history-content">
+                    <span id="close-history" class="close">&times;</span>
+                    <h2>Povijest</h2>
+                    
+                    <select id="opFilter">
+                        <option value="">Sve</option>
+                        <option value="+">+</option>
+                        <option value="-">-</option>
+                        <option value="x">x</option>
+                        <option value="÷">÷</option>
+                        <option value="√">√</option>
+                        <option value="!">!</option>
+                        <option value="log">log</option>
+                        <option value="x²">x²</option>
+                        <option value="x³">x³</option>
+                        <option value="³√">³√</option>
+                    </select>
+                
                 <div id = "history-list" class="history-list"></div>
             </div>
         </div>
-
+        
     </div>
-
+    
     <script src="script.js"></script>
 </body>
 </html>

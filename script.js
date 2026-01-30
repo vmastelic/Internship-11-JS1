@@ -127,6 +127,7 @@ function handleButtonClick(btn){
     else if(btn.type === "equal")isEqual(number, operation, currentValue);
     else if(btn.type === "action")handleAction(btn);
     
+    
     updateDisplay();
 }
 
@@ -169,7 +170,7 @@ function addOperation(btn){
           op: opLabel,
           result: result
         });
-        renderHistory();
+        renderHistory(getFilteredHistory());
         
         return;
     }
@@ -195,7 +196,7 @@ function addOperation(btn){
           op: opLabel,
           result: result
         });
-        renderHistory();
+        renderHistory(getFilteredHistory());
         
         return;        
     }
@@ -217,7 +218,7 @@ function addOperation(btn){
           op: opLabel,
           result: result
         });
-        renderHistory();
+        renderHistory(getFilteredHistory());
 
         return;
     }
@@ -242,7 +243,7 @@ function addOperation(btn){
           op: opLabel,
           result: result
         });
-        renderHistory();
+        renderHistory(getFilteredHistory());
 
         return;
     }
@@ -259,7 +260,7 @@ function addOperation(btn){
           op: opLabel,
           result: result
         });
-        renderHistory();
+        renderHistory(getFilteredHistory());
         
         return;
     }
@@ -276,7 +277,7 @@ function addOperation(btn){
           op: opLabel,
           result: result
         });
-        renderHistory();
+        renderHistory(getFilteredHistory());
         
         return;
     }
@@ -318,7 +319,7 @@ function isEqual(first, op, second){
         op: op,
         result: result
     });
-    renderHistory();
+    renderHistory(getFilteredHistory());
     
     number = null;
     operation = null;
@@ -377,7 +378,6 @@ function addToHistory({ a, b = null, op, result }) {
   });
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
   const history = document.getElementById("history");
   const openBtn = document.getElementById("history-button");
@@ -396,13 +396,33 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-function renderHistory() {
+
+const opFilter = document.getElementById("opFilter");
+
+if(opFilter){
+    opFilter.addEventListener("change", () => renderHistory(getFilteredHistory()));
+}
+
+function getFilteredHistory() {
+    const opFilterEl = document.getElementById("opFilter");
+    const selected = opFilterEl ? opFilterEl.value : "";
+    
+    if (!selected) return historyList;
+    return historyList.filter(item => item.op === selected); 
+}
+
+function renderHistory(data = historyList) {
   const historyContainer = document.getElementById("history-list");
   if (!historyContainer) return;
 
   historyContainer.innerHTML = "";
 
-  historyList.forEach(item => {
+  if (data.length === 0) {
+    historyContainer.textContent = "Nema zapisa.";
+    return;
+  }
+
+  data.forEach(item => {
     const row = document.createElement("div");
     row.classList.add("history-item");
 
@@ -411,14 +431,13 @@ function renderHistory() {
       : `${item.a} ${item.op} ${item.b}`;
 
     row.innerHTML = `
-    <div class = "history-item-wrapper">
-      <div class="history-expr">${expr}</div>
-      <div class="history-result">= ${item.result}</div>
-    </div>
-    <div class="history-time">${item.time}</div>
+      <div class="history-item-wrapper">
+        <div class="history-expr">${expr}</div>
+        <div class="history-result">= ${item.result}</div>
+      </div>
+      <div class="history-time">${item.time}</div>
     `;
 
     historyContainer.appendChild(row);
   });
 }
-
