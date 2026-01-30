@@ -90,6 +90,8 @@ const buttons = [
     }
 ]
 
+let historyList = [];
+
 const buttonsContainer = document.getElementById("buttons");
 
 let shiftMode = false;
@@ -129,6 +131,7 @@ function handleButtonClick(btn){
 }
 
 function updateDisplay(){
+    console.log(historyList);
     display.textContent = displayValue;
 }
 
@@ -145,6 +148,7 @@ function addNumber(value){
 function addOperation(btn){
 
     const opKey = (shiftMode && btn.shiftValue) ? btn.shiftValue : btn.value;
+    const opLabel = (shiftMode && btn.shiftLabel) ? btn.shiftLabel : btn.label;
 
     if(operation !== null)return;
     else if(currentValue === "")return;
@@ -158,6 +162,15 @@ function addOperation(btn){
 
         number = null;
         operation = null;
+
+        addToHistory({
+          a: num,
+          b: null,
+          op: opLabel,
+          result: result
+        });
+        renderHistory();
+        
         return;
     }
     
@@ -175,6 +188,15 @@ function addOperation(btn){
         const result = factorial(num);
         displayValue = String(result);
         currentValue = String(result);
+
+        addToHistory({
+          a: num,
+          b: null,
+          op: opLabel,
+          result: result
+        });
+        renderHistory();
+        
         return;        
     }
     
@@ -188,6 +210,15 @@ function addOperation(btn){
 
         number = null;
         operation = null;
+        
+        addToHistory({
+          a: num,
+          b: null,
+          op: opLabel,
+          result: result
+        });
+        renderHistory();
+
         return;
     }
 
@@ -204,6 +235,15 @@ function addOperation(btn){
 
         displayValue = String(result);
         currentValue = String(result);
+        
+        addToHistory({
+          a: num,
+          b: null,
+          op: opLabel,
+          result: result
+        });
+        renderHistory();
+
         return;
     }
 
@@ -213,6 +253,14 @@ function addOperation(btn){
 
         displayValue = String(result);
         currentValue = String(result);
+        addToHistory({
+          a: num,
+          b: null,
+          op: opLabel,
+          result: result
+        });
+        renderHistory();
+        
         return;
     }
 
@@ -222,6 +270,14 @@ function addOperation(btn){
 
         displayValue = String(result);
         currentValue = String(result);
+        addToHistory({
+          a: num,
+          b: null,
+          op: opLabel,
+          result: result
+        });
+        renderHistory();
+        
         return;
     }
 
@@ -244,7 +300,7 @@ function isEqual(first, op, second){
     else if(op === "-")result = first - second;
     else if(op === "x")result = first * second;
     else if(op === "÷"){
-
+        
         if(second === 0){
             displayValue = "ERROR: Nemoguće dijeliti sa nulom!";
             number = null;
@@ -255,7 +311,15 @@ function isEqual(first, op, second){
         else
             result = first / second;
     }
-
+    
+    addToHistory({
+        a: first,
+        b: second,
+        op: op,
+        result: result
+    });
+    renderHistory();
+    
     number = null;
     operation = null;
     currentValue = String(result);
@@ -263,14 +327,14 @@ function isEqual(first, op, second){
 }
 
 function handleAction(btn){
-
+    
     if(btn.value === "clear"){
         number = null;
         currentValue = "";
         operation = null;
         displayValue = "";
     }
-
+    
     else if(btn.value === "shift"){
         shiftMode = !shiftMode;
         updateButtonLabels();
@@ -302,3 +366,59 @@ function factorial(n) {
     if (n === 0) return 1;       
     return n * factorial(n - 1); 
 }
+
+function addToHistory({ a, b = null, op, result }) {
+  historyList.push({
+    a,
+    b,
+    op,
+    result,
+    time: new Date().toLocaleString()
+  });
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  const history = document.getElementById("history");
+  const openBtn = document.getElementById("history-button");
+  const closeBtn = document.getElementById("close-history");
+
+  openBtn.addEventListener("click", () => {
+    history.style.display = "block";
+  });
+
+  closeBtn.addEventListener("click", () => {
+    history.style.display = "none";
+  });
+
+  window.addEventListener("click", (e) => {
+    if (e.target === history) history.style.display = "none";
+  });
+});
+
+function renderHistory() {
+  const historyContainer = document.getElementById("history-list");
+  if (!historyContainer) return;
+
+  historyContainer.innerHTML = "";
+
+  historyList.forEach(item => {
+    const row = document.createElement("div");
+    row.classList.add("history-item");
+
+    const expr = item.b === null
+      ? `${item.op}(${item.a})`
+      : `${item.a} ${item.op} ${item.b}`;
+
+    row.innerHTML = `
+    <div class = "history-item-wrapper">
+      <div class="history-expr">${expr}</div>
+      <div class="history-result">= ${item.result}</div>
+    </div>
+    <div class="history-time">${item.time}</div>
+    `;
+
+    historyContainer.appendChild(row);
+  });
+}
+
