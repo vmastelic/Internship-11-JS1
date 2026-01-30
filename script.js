@@ -95,6 +95,7 @@ let historyList = [];
 const buttonsContainer = document.getElementById("buttons");
 
 let shiftMode = false;
+let isOn = true;
 
 buttons.forEach(btn => {
     const button = document.createElement("button");
@@ -122,17 +123,17 @@ let displayValue = "";
 
 function handleButtonClick(btn){
 
+    if(!isOn && btn.value != "power")return;
+
     if(btn.type === "number")addNumber(btn.value);
     else if(btn.type === "operation")addOperation(btn);
     else if(btn.type === "equal")isEqual(number, operation, currentValue);
     else if(btn.type === "action")handleAction(btn);
     
-    
     updateDisplay();
 }
 
 function updateDisplay(){
-    console.log(historyList);
     display.textContent = displayValue;
 }
 
@@ -328,6 +329,29 @@ function isEqual(first, op, second){
 }
 
 function handleAction(btn){
+
+    if (btn.value === "power") {
+    isOn = !isOn;
+
+    if (!isOn) {
+        number = null;
+        operation = null;
+        currentValue = "";
+        displayValue = "off";        
+        historyList = [];         
+    
+        renderHistory(getFilteredHistory()); 
+        
+    } else {
+        number = null;
+        operation = null;
+        currentValue = "";
+        displayValue = "";     
+        }
+    
+        updateDisplay();
+        return;
+    }
     
     if(btn.value === "clear"){
         number = null;
@@ -441,3 +465,4 @@ function renderHistory(data = historyList) {
     historyContainer.appendChild(row);
   });
 }
+
